@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,6 +10,16 @@ namespace MultiplayerGameTest
     /// </summary>
     public class GameManager : Game
     {
+
+        private List<GameObject> gameObjects = new List<GameObject>();
+        public List<GameObject> GameObjects
+        {
+            get { return gameObjects; }
+            set { gameObjects = value; }
+        }
+
+        public Texture2D spr_rock, spr_ship, spr_aim;
+        public static Vector2 cameraPosition = new Vector2(0, 0);
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -16,6 +27,10 @@ namespace MultiplayerGameTest
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
+            Window.Position = new Point(0, 0);
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 900;
+            Window.IsBorderless = true;
             Content.RootDirectory = "Content";
         }
 
@@ -28,8 +43,11 @@ namespace MultiplayerGameTest
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
+
+            gameObjects.Add(new Ship(new Vector2(900-32,450-32), new Vector2(0,0), new Vector2(0,0), spr_ship));
+
+
         }
 
         /// <summary>
@@ -41,6 +59,9 @@ namespace MultiplayerGameTest
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            spr_aim  = Content.Load<Texture2D>("aim");
+            spr_rock = Content.Load<Texture2D>("rock");
+            spr_ship = Content.Load<Texture2D>("spaceship");
             // TODO: use this.Content to load your game content here
         }
 
@@ -60,12 +81,20 @@ namespace MultiplayerGameTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        
+            for(int i = 0; i < gameObjects.Count; i++)
+            {
+                gameObjects[i].Update(deltaTime);
+            }
 
-            // TODO: Add your update logic here
-
-            base.Update(gameTime);
+                // TODO: Add your update logic here
+                base.Update(gameTime);
         }
 
         /// <summary>
@@ -74,8 +103,18 @@ namespace MultiplayerGameTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
+
+            for (int i = 0; i < gameObjects.Count; i++)
+            {
+                gameObjects[i].Draw(spriteBatch,deltaTime);
+            }
+
+            spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
