@@ -26,13 +26,13 @@ namespace MultiplayerGameTest
         public Vector2 Velocity
         {
             get { return velocity; }
-            set { position = value; }
+            set { velocity = value; }
         }
 
         public Vector2 Direction
         {
-            get { return velocity; }
-            set { position = value; }
+            get { return direction; }
+            set { direction = value; }
         }
 
         public Texture2D Sprite
@@ -59,8 +59,11 @@ namespace MultiplayerGameTest
         }
 
         public GameObject(Vector2 position, Vector2 velocity, float rotation,Texture2D sprite)
-        { 
-            
+        {
+            this.position = position;
+            this.velocity = velocity;
+            this.direction = Vector2.Zero; //needs calc
+            this.sprite = sprite;
         }
 
         public virtual void Update(float deltaTime)
@@ -81,7 +84,7 @@ namespace MultiplayerGameTest
 
         public virtual void Draw(SpriteBatch spriteBatch,float deltaTime)
         {
-            spriteBatch.Draw(Sprite, new Vector2((int)position.X - sprite.Width/2, (int)position.Y - sprite.Height/2), new Rectangle(0, 0, Sprite.Width, Sprite.Height), Color.White, rotation, new Vector2(sprite.Width / 2, sprite.Height / 2),1.0f, SpriteEffects.None, 1);
+            spriteBatch.Draw(Sprite, new Vector2((int)position.X - sprite.Width / 2 - GameManager.cameraPosition.X, (int)position.Y - sprite.Height / 2 - GameManager.cameraPosition.Y), new Rectangle(0, 0, Sprite.Width, Sprite.Height), Color.White, rotation, new Vector2(sprite.Width / 2, sprite.Height / 2), 1.0f, SpriteEffects.None, 1);
         }
 
         public virtual void OnCollision(GameObject other)
@@ -89,9 +92,9 @@ namespace MultiplayerGameTest
 
         }
 
-        public void Destroy()
-        { 
-            
+        public void Destroy(GameObject obj)
+        {
+            GameManager.GameObjects.Remove(obj);
         }
 
 

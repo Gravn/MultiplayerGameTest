@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace MultiplayerGameTest
 {
@@ -11,14 +12,14 @@ namespace MultiplayerGameTest
     public class GameManager : Game
     {
 
-        private List<GameObject> gameObjects = new List<GameObject>();
-        public List<GameObject> GameObjects
+        private static List<GameObject> gameObjects = new List<GameObject>();
+        public static List<GameObject> GameObjects
         {
             get { return gameObjects; }
             set { gameObjects = value; }
         }
 
-        public Texture2D spr_rock, spr_ship, spr_aim;
+        public static Texture2D spr_rock, spr_ship, spr_particle;
         public static Vector2 cameraPosition = new Vector2(0, 0);
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -45,7 +46,18 @@ namespace MultiplayerGameTest
             // TODO: Add your initialization logic here
             base.Initialize();
 
-            gameObjects.Add(new Ship(new Vector2(900-32,450-32), new Vector2(0,0), new Vector2(0,0), spr_ship));
+            gameObjects.Add(new PlayerShip(new Vector2(900-32,450-32), new Vector2(0,0), new Vector2(0,0), spr_ship));
+            gameObjects.Add(new Rock(new Vector2(200, 200), Vector2.Zero, Vector2.Zero, spr_rock));
+
+            for (int i = 0; i < 36; i++)
+            {
+                gameObjects.Add(new Rock(new Vector2((float)Math.Sin(i) * 800f, (float)Math.Cos(i) * 2000), Vector2.Zero, Vector2.Zero, spr_rock));
+            }
+
+            for (int i = 0; i < 36; i++)
+            {
+                gameObjects.Add(new Rock(new Vector2((float)Math.Sin(i) * 2000f, (float)Math.Cos(i) * 800), Vector2.Zero, Vector2.Zero, spr_rock));
+            }
 
 
         }
@@ -59,7 +71,7 @@ namespace MultiplayerGameTest
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            spr_aim  = Content.Load<Texture2D>("aim");
+            spr_particle = Content.Load<Texture2D>("particle");
             spr_rock = Content.Load<Texture2D>("rock");
             spr_ship = Content.Load<Texture2D>("spaceship");
             // TODO: use this.Content to load your game content here

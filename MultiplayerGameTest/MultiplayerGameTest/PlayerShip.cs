@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MultiplayerGameTest
 {
-    class Ship : GameObject
+    class PlayerShip : GameObject
     {
-        public Ship(Vector2 position, Vector2 velocity, Vector2 direction, Texture2D sprite)
+        public PlayerShip(Vector2 position, Vector2 velocity, Vector2 direction, Texture2D sprite)
             : base(position, velocity, direction, sprite)
         { 
             
@@ -48,13 +48,13 @@ namespace MultiplayerGameTest
                 this.Velocity -= new Vector2((float)Math.Sin((double)rotation) * 2, -(float)Math.Cos((double)rotation) * 2);
             }
             GameManager.cameraPosition += this.Velocity * deltaTime;
-
+            GameManager.GameObjects.Add(new Particle(new Vector2((float)Math.Cos((double)rotation)*-50+this.Position.X, (float)Math.Sin((double)rotation)*-50+this.Position.Y) + GameManager.cameraPosition,this.Velocity, Vector2.Zero, GameManager.spr_particle));
             base.Update(deltaTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch,float deltaTime)
         {
-            base.Draw(spriteBatch,deltaTime);
+            spriteBatch.Draw(Sprite, new Vector2(Position.X - Sprite.Width/2,Position.Y - Sprite.Height/2), new Rectangle(0, 0, Sprite.Width, Sprite.Height), Color.White, rotation, new Vector2(Sprite.Width / 2, Sprite.Height / 2),1.0f, SpriteEffects.None, 1);
         }
     }
 
