@@ -16,6 +16,8 @@ namespace MultiplayerGameTest
         { 
             
         }
+
+        float timer = 0;
         public override void Update(float deltaTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.A))
@@ -48,8 +50,14 @@ namespace MultiplayerGameTest
                 this.Velocity -= new Vector2((float)Math.Sin((double)rotation) * 2, -(float)Math.Cos((double)rotation) * 2);
             }
             GameManager.cameraPosition += this.Velocity * deltaTime;
-            GameManager.GameObjects.Add(new Particle(new Vector2((float)Math.Cos((double)rotation)*-50+this.Position.X, (float)Math.Sin((double)rotation)*-50+this.Position.Y) + GameManager.cameraPosition,this.Velocity, Vector2.Zero, GameManager.spr_particle));
-            base.Update(deltaTime);
+
+            timer += deltaTime;
+            if (timer >= 0.05f)
+            {
+                GameManager.GameObjects.Add(new Particle(new Vector2((float)Math.Cos((double)rotation) * -50 + this.Position.X, (float)Math.Sin((double)rotation) * -50 + this.Position.Y) + GameManager.cameraPosition, this.Velocity, Vector2.Zero, GameManager.spr_particle));
+                timer = 0;
+            }
+                base.Update(deltaTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch,float deltaTime)
