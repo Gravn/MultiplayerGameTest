@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
 
 namespace MultiplayerGameTest
 {
@@ -11,7 +12,7 @@ namespace MultiplayerGameTest
     /// </summary>
     public class GameManager : Game
     {
-
+        public NetworkClient Client;
         private static List<GameObject> gameObjects = new List<GameObject>();
         public static List<GameObject> GameObjects
         {
@@ -48,8 +49,9 @@ namespace MultiplayerGameTest
             base.Initialize();
 
             gameObjects.Add(new PlayerShip(new Vector2(900-32,450-32), new Vector2(0,0), new Vector2(0,0), spr_ship));
+            //gameObjects.Add(new Ship(new Vector2(900-32,450-32), new Vector2(0,0), new Vector2(0,0), spr_ship));
             gameObjects.Add(new Rock(new Vector2(200, 200), Vector2.Zero, Vector2.Zero, spr_rock));
-
+            Client = new NetworkClient();
             for (int i = 0; i < 36; i++)
             {
                 gameObjects.Add(new Rock(new Vector2((float)Math.Sin(i) * 800f, (float)Math.Cos(i) * 2000), Vector2.Zero, Vector2.Zero, spr_rock));
@@ -95,7 +97,6 @@ namespace MultiplayerGameTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
@@ -106,6 +107,8 @@ namespace MultiplayerGameTest
             {
                 gameObjects[i].Update(deltaTime);
             }
+            Client.CheckServerMessages();
+            
 
                 // TODO: Add your update logic here
                 base.Update(gameTime);
