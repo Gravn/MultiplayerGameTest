@@ -55,6 +55,7 @@ namespace MultiplayerGameTest
         public override void Draw(SpriteBatch spriteBatch,float deltaTime)
         {
             spriteBatch.Draw(Sprite, new Vector2(Position.X - Sprite.Width/2,Position.Y - Sprite.Height/2), new Rectangle(0, 0, Sprite.Width, Sprite.Height), Color.White, rotation, new Vector2(Sprite.Width / 2, Sprite.Height / 2),1.0f, SpriteEffects.None, 1);
+            spriteBatch.DrawString(GameManager.testfont, "Test", new Vector2((float)Math.Cos((double)rotation)*50+this.Position.X, (float)Math.Sin((double)rotation)*50+this.Position.Y), Color.White,0, Vector2.Zero, 2f, SpriteEffects.None, 1);
         }
     }
 

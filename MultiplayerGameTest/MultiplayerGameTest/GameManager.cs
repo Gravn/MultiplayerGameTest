@@ -20,6 +20,7 @@ namespace MultiplayerGameTest
         }
 
         public static Texture2D spr_rock, spr_ship, spr_particle;
+        public static SpriteFont testfont;
         public static Vector2 cameraPosition = new Vector2(0, 0);
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -74,6 +75,7 @@ namespace MultiplayerGameTest
             spr_particle = Content.Load<Texture2D>("particle");
             spr_rock = Content.Load<Texture2D>("rock");
             spr_ship = Content.Load<Texture2D>("spaceship");
+            testfont = Content.Load<SpriteFont>("testFont");
             // TODO: use this.Content to load your game content here
         }
 
@@ -125,6 +127,9 @@ namespace MultiplayerGameTest
             {
                 gameObjects[i].Draw(spriteBatch,deltaTime);
             }
+
+            spriteBatch.DrawString(testfont, "halloej", new Vector2(100, 100), Color.White);
+            spriteBatch.DrawString(testfont, "Test", new Vector2(100-cameraPosition.X,120-cameraPosition.Y), Color.White, 27, Vector2.Zero, 2f, SpriteEffects.None, 1);
 
             spriteBatch.End();
             // TODO: Add your drawing code here
